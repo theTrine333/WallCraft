@@ -34,7 +34,7 @@ const SeeAll = ({navigation, route}) => {
           }} style={styles.Card}>
               <Image
                   source={{uri: Poster}}
-                  style={{width:105,height:150,borderRadius:10}}
+                  style={{flex:1,borderRadius:10}}
                   resizeMode='cover'
               />
           </TouchableOpacity>
@@ -81,7 +81,7 @@ const SeeAll = ({navigation, route}) => {
 }
 
 export default SeeAll
-
+const {height,width} = Dimensions.get("window");
 const styles = StyleSheet.create({
   Container:{
     flex:1,
@@ -102,7 +102,9 @@ const styles = StyleSheet.create({
     },
   },Card:{
     marginLeft:10,
-    marginBottom:10
+    marginBottom:10,
+    height:height*0.18,
+    width:width*0.29
   },container: {
     flex: 1,
     alignItems: 'center',

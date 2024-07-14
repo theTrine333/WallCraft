@@ -57,38 +57,6 @@ export async function get_images(tag, page) {
     }
 }
 
-export async function get_images_search(tag) {
-    if (tag.endsWith(' ')) {
-        tag = tag.substring(0, tag.length - 1);
-      }
-    searchUrl = `${mainUrl}/gallery/tag=${tag}/`;
-    try {
-        const response = await axios.get(searchUrl,{
-            timeout: 5000 // Timeout in milliseconds (5000ms = 5 seconds)
-          });
-        const $ = cheerio.load(response.data);
-        const containers = $(".image-gallery__items.image-gallery-items-container");
-        const imageLinks = [];
-
-        containers.each((index, container) => {
-            const images = $(container).find("img");
-            images.each((i, x) => {
-                const parentATag = "https:" + $(x).parent("a").attr("href");
-                const image = $(x).attr('src') + "?h=450&r=0.5";
-                
-                imageLinks.push({
-                    Image_url: parentATag,
-                    Image: image
-                });
-            });
-        });
-
-        return imageLinks;
-    } catch (error) {
-        return error;
-    }
-}
-
 export async function getSimilarTags(mainUrl) {
     try {
         const response = await axios.get(mainUrl);
@@ -124,44 +92,67 @@ export async function getSimilarTags(mainUrl) {
     }
 }
 
-export async function getSimilarImages(url) {
-    let SimilarImages = [];
-    try {
-        const data = await axios.get(url);
-        const $ = cheerio.load(data);
-        const Container = $('.container-2');
-        const holder = Container.eq(3).find('.image-gallery-items');
-        const Items = holder.find('.image-gallery-items__item');
+export async function getSearch(word,setData){
+    await fetch("https://wallpaper.mob.org/xrequest/search/", {
+        "headers": {
+          "accept": "application/json, text/javascript, */*; q=0.01",
+          "accept-language": "en-US,en;q=0.9",
+          "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          "priority": "u=1, i",
+          "sec-ch-ua": "\"Chromium\";v=\"125\", \"Not.A/Brand\";v=\"24\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Linux\"",
+          "sec-fetch-dest": "empty",
+          "sec-fetch-mode": "cors",
+          "sec-fetch-site": "same-origin",
+          "x-requested-with": "XMLHttpRequest",
+          "Referer": "https://wallpaper.mob.org/",
+          "Referrer-Policy": "strict-origin-when-cross-origin"
+        },
+        "body": `razdel=pic&search_word=${word}&offset=0&limit=15&pc=`,
+        "method": "POST",
+      }).then(res =>res.json()).then(data =>{
+          setData(data)
+      });
+}
 
-        Items.each((index, element) => {
-            const item = $(element);
-            const image = item.find('.image-gallery-image img').attr('src');
-            const imageUrl = "https:" + item.find('.image-gallery-image .image-gallery-image__inner').attr('href');
-            
-            SimilarImages.push({ Image: image, ImageUrl: imageUrl });
+export async function get_images_search(tag) {
+    if (tag.endsWith(' ')) {
+        tag = tag.substring(0, tag.length - 1);
+      }
+    searchUrl = `${mainUrl}/gallery/tag=${tag}/`;
+    try {
+        const response = await axios.get(searchUrl,{
+            timeout: 5000 // Timeout in milliseconds (5000ms = 5 seconds)
+          });
+        const $ = cheerio.load(response.data);
+        const containers = $(".image-gallery__items.image-gallery-items-container");
+        const imageLinks = [];
+
+        containers.each((index, container) => {
+            const images = $(container).find("img");
+            images.each((i, x) => {
+                const parentATag = "https:" + $(x).parent("a").attr("href");
+                const image = $(x).attr('src') + "?h=450&r=0.5";
+                
+                imageLinks.push({
+                    Image_url: parentATag,
+                    Image: image
+                });
+            });
         });
 
-        return SimilarImages;
+        return imageLinks;
     } catch (error) {
-        console.error("An Error Occurred:\n", error);
         return error;
     }
 }
 
-export async function getRelatedTags(mainUrl) {
-    let relatedTags = [];
-    try {
-        const data = await axios.get(mainUrl);
-        const $ = cheerio.load(data);
-        const Tagscontainer = $('.page-image__gallery-tags .page-image__gallery-tags-item');
+export function extractTags(String){
+    const url = `${String}`;
+    const startIdx = url.indexOf('=') + 1;
+    const endIdx = url.length - 1;
+    const extractedWord = url.substring(startIdx, endIdx); 
 
-        Tagscontainer.each((index, element) => {
-            const tag = $(element).text().trim();
-            relatedTags.push(tag);
-        });
-
-        return relatedTags;
-    } catch (error) {
-        return error;
-    }
+    return extractedWord
 }

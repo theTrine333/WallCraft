@@ -2,6 +2,7 @@ import { ActivityIndicator, Image,StyleSheet, TouchableOpacity,Text,FlatList, Di
 import {React,useState } from 'react'
 import * as Fetcher from '@/api/fetcher';
 import { useNavigation } from '@react-navigation/native';
+import FastImage from '@changwoolab/react-native-fast-image';
 
 const Search = () => {
     const [text,setText] = useState('');
@@ -21,10 +22,10 @@ const Search = () => {
           }} style={styles.Card}>
             <View style={{flexDirection:'row',width:width*0.8}}>
               <View style={{marginLeft:10,marginRight:10,marginBottom:10,height:height*0.1,width:width*0.2}}>
-                <Image
+                <FastImage
                   source={{uri: `${data.img}`}}
                   style={{flex:1,borderRadius:8}}
-                  resizeMode='cover'
+                  resizeMode={FastImage.resizeMode.cover}
                 />
               </View>
               <View>
@@ -37,7 +38,7 @@ const Search = () => {
       )
     }
 
-    const handleTextChange = (inputText) => {
+    function handleTextChange(inputText){
       setText(inputText);
       setLoading(true)
       clearTimeout(timeoutId); // Clear previous timeout
@@ -45,29 +46,16 @@ const Search = () => {
         Fetcher.getSearch(text,setTags).then(data =>{
           setLoading(false);
         })
-      }, 700);
+      }, 800);
     };
 
   return (
     <View style={styles.container}>
       <TextInput style={styles.searchBox} 
         placeholder='Search for a tag'
-        onChangeText={handleTextChange}
-        onSubmitEditing={async ()=>{
-          if (text != ''){
-              setLoading(true)
-              Fetcher.get_images_search(text).then(tags => {
-                if (tags.length === 0) {
-                  setEmpty(true)
-                  setLoading(false)
-                } else {
-                  setTags(tags)
-                  setEmpty(false)
-                  setFetched(true)  
-                  setLoading(false)
-                }                
-              }).catch(error => console.error(error))  
-          }
+        onChangeText={(text) =>{
+          setText(text)
+          handleTextChange(text)
         }}
       />
       {

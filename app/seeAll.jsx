@@ -1,10 +1,10 @@
 import { Text, View } from '@/components/Themed';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react'
-import { Image,Share,ScrollView,Dimensions,StyleSheet, FlatList,TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Share,ScrollView,Dimensions,StyleSheet, FlatList,TouchableOpacity, ActivityIndicator } from 'react-native';
 import * as Icon from 'react-native-heroicons/outline'
 import * as Fetcher from '../api/fetcher'
-
+import FastImage from '@changwoolab/react-native-fast-image';
 let page = 2;
 
 const SeeAll = ({navigation, route}) => {
@@ -32,10 +32,11 @@ const SeeAll = ({navigation, route}) => {
               })
               
           }} style={styles.Card}>
-              <Image
+            
+              <FastImage
                   source={{uri: Poster}}
                   style={{flex:1,borderRadius:10}}
-                  resizeMode='cover'
+                  resizeMode={FastImage.resizeMode.cover}
               />
           </TouchableOpacity>
       )

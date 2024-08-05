@@ -1,11 +1,14 @@
 import { Text, View } from '@/components/Themed';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react'
-import { Image, Share,ScrollView,Platform,Dimensions,StyleSheet, FlatList,Pressable,Alert, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Share,ScrollView,Platform,Dimensions,StyleSheet, FlatList,Pressable,Alert, TouchableOpacity, ActivityIndicator,Modal } from 'react-native';
 import * as Icon from 'react-native-heroicons/outline'
 import { getSimilarTags } from '@/api/fetcher';
 import { setWallpaper, TYPE_SCREEN } from 'rn-wallpapers';
 import * as FileSystem from 'expo-file-system';
+import ProgressCircle from "rn-circle-progress"
+import FastImage from '@changwoolab/react-native-fast-image';
+
 const WallCraftFolder = 'WallCraft';
 
 const Viewer = ({navigation, route}) => {
@@ -18,6 +21,8 @@ const Viewer = ({navigation, route}) => {
   const [downloadProgress, setDownloadProgress] = React.useState(0);
   const [fileUri, setFileUri] = React.useState('');
   const [Tags,setTags] = React.useState([])
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [isSet,setIsSet] = React.useState(false)
 
   const downloadFile = async () => {
     const uri = Poster;
@@ -27,7 +32,7 @@ const Viewer = ({navigation, route}) => {
 
     async function saveFile(uri, filename, mimetype) {
       if (Platform.OS === "android") {
-        const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+        const permissions = await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync(WallCraftFolder);
     
         if (permissions.granted) {
           const base64 = await FileSystem.readAsStringAsync(uri, { encoding: FileSystem.EncodingType.Base64 });
@@ -44,22 +49,26 @@ const Viewer = ({navigation, route}) => {
         shareAsync(uri);
       }
     }
+    setIsSet(true)
+    setModalVisible(true)
 
     const downloadResumable = FileSystem.createDownloadResumable(
       uri,
       fileUri,
       {},
       (downloadProgress) => {
-        const progress = downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite;
-        setDownloadProgress(progress);
+        const progress = (downloadProgress.totalBytesWritten / downloadProgress.totalBytesExpectedToWrite)*100;
+        setDownloadProgress(progress.toFixed(2));
       }
     );
 
     try {
       const fileuri = await downloadResumable.downloadAsync();
       setFileUri(fileuri);
-      console.log(fileuri["headers"]['content-type']);
       saveFile(fileuri.uri, fileName, fileuri["headers"]['content-type']);
+      setIsSet(false)
+      setModalVisible(false)
+      setDownloadProgress(0)
     } catch (e) {
       console.error(e);
     }
@@ -105,55 +114,118 @@ const Viewer = ({navigation, route}) => {
   return (
     <ScrollView style={{flex:1,alignContent:'center'}}>
       <StatusBar style="light" />
-        <Image
-          source={{uri: Poster}}
-          style={{width:width,height:height+40,borderRadius:5,alignSelf: 'center'}}
-          resizeMode="cover"
-        />
-      <View style={{width:'100%',flexDirection:'row',justifyContent:'center', backgroundColor: 'transparent' }}>
-        <TouchableOpacity style={style.buttons} onPress={() => {
-          Alert.alert('WallCraft', 'Do you want to set this as your home or lockscreen wallpaper', [
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(!modalVisible)}}>
+        <View style={style.centeredView}>
+          <View style={style.modalView}>
             {
-              text: 'Both',
-              onPress: async () => {
-                setWallpaper(
-                  {
-                    uri:`${Poster}`,
-                  },
-                  TYPE_SCREEN.BOTH
-                );
-                console.log('Wallpaper set successfully')
-              },
-              style: 'cancel',
-            },
-            {
-              text: 'Home', onPress: async () => {
-                setWallpaper(
-                  {
-                    uri: `${Poster}`,
-                  },
-                  TYPE_SCREEN.HOME // Sets the wallpaper on Lock Screen only
-                );
-              }
-            },{
-              text:"Lock",onPress: async ()=>{
-                setWallpaper(
-                  {
-                    uri: `${Poster}`,
-                  },
-                  TYPE_SCREEN.LOCK // Sets the wallpaper on Lock Screen only
-                );
-              }
+              isSet && downloadProgress === 0 ? (<ActivityIndicator size={'large'}/>):
+              downloadProgress > 0 ? (
+              <ProgressCircle
+                percent={downloadProgress}
+                radius={30}
+                borderWidth={4}
+                color="#3399FF"
+                shadowColor="#999"
+                bgColor="#fff"
+              >
+                <Text style={{ fontSize: 13,color:"#3399FF" }}>{`${downloadProgress}%`}</Text>
+              </ProgressCircle>) :
+              (
+                <>
+                <Text style={{textAlign: 'center', color:'black',fontWeight:500, fontSize:18}}>Screen to apply for wallpaper</Text>
+                <View style={{flexDirection:'row',backgroundColor:'transparent',alignItems: 'center',gap:15}}>
+                  <TouchableOpacity style={{marginTop:20,marginRight:10}}
+                    onPress={async () =>{
+                      setIsSet(true)
+                      setWallpaper({
+                        uri: `${Poster}`,
+                      },TYPE_SCREEN.HOME
+                    ).then(() =>{
+                        setModalVisible(false)
+                        setIsSet(false)  
+                      }
+                    )
+                  }
+                }
+                  >
+                    <Icon.HomeIcon style={{justifyContent:'flex-end',marginLeft:5}} color={'rgb(35,45,75)'} size={40}/>
+                    <Text style={{color:'black',paddingLeft:7}}>Home</Text>
+                  </TouchableOpacity>
+    
+                  <TouchableOpacity style={{marginTop:20}} 
+                    onPress={async () =>{
+                      setIsSet(true)
+                      setWallpaper({
+                        uri: `${Poster}`,
+                      },TYPE_SCREEN.LOCK
+                    ).then(() =>{
+                        setModalVisible(false)
+                        setIsSet(false)  
+                      }
+                    )
+                  }
+                }
+                  >
+                    <Icon.LockClosedIcon style={{alignContent:'center',marginLeft:3}} color={'rgb(35,45,75)'} size={40}/>
+                    <Text style={{color:'black',paddingLeft:8}}>Lock</Text>
+                  </TouchableOpacity>
+    
+                  <TouchableOpacity style={{marginTop:20,marginLeft:10}}
+                    onPress={async () =>{
+                      setIsSet(true)  
+                      setWallpaper({
+                          uri: `${Poster}`,
+                        },TYPE_SCREEN.BOTH
+                      ).then(() =>{
+                          setModalVisible(false)
+                          setIsSet(false)  
+                        }
+                      )
+                    }
+                  }
+                  >
+                    <Icon.DevicePhoneMobileIcon color={'rgb(35,45,75)'} size={40}/>
+                    <Text style={{color:'black',paddingLeft:7}}>Both</Text>
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity 
+                  style={{backgroundColor:'red',marginTop:10, marginLeft:10,marginRight:5,paddingTop:10,paddingBottom:10,paddingLeft:90,paddingRight:90,borderRadius:26}}
+                  onPress={() =>setModalVisible(false)}  
+                >
+                  <Text style={{fontWeight:500,color:'#fff'}}>Close</Text>
+                </TouchableOpacity>
+                </>
+              )
             }
-          ]);
-        }}>
+            
+          </View>
+        </View>
+      </Modal>
+      
+      <FastImage
+        style={{ width:width,height:height+40,borderRadius:5,alignSelf: 'center'}}
+        source={{
+            uri: Poster,
+            priority: FastImage.priority.high,
+        }}
+        resizeMode={FastImage.resizeMode.cover}
+      />
+
+      <View style={{width:'100%',flexDirection:'row',justifyContent:'center', backgroundColor: 'transparent' }}>
+        <TouchableOpacity style={style.buttons} onPress={() => {setModalVisible(true)}}>
         <Icon.Cog8ToothIcon color="green" size={38}/>
         </TouchableOpacity>
+        
         <TouchableOpacity style={style.buttons} onPress={() => {
           downloadFile()
         }}>
           <Icon.ArrowDownCircleIcon color="green" size={38}/>
         </TouchableOpacity>
+
         <TouchableOpacity style={style.buttons} onPress={async () => {
             const shareResults = await Share.share({
               message:`Checkout this awesome wallpaper ${Poster}`,
@@ -192,6 +264,10 @@ const Viewer = ({navigation, route}) => {
 export default Viewer
 
 const style = StyleSheet.create({
+  centeredView: {
+    marginTop:'60%',
+    backgroundColor:'transparent'
+  },
   buttons:{
     padding:10,
     backgroundColor:'transparent',
@@ -220,5 +296,22 @@ const style = StyleSheet.create({
   },title: {
     fontSize: 20,
     fontWeight: 600,
+  },modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 25,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
+  icnBtns:{
+    margin:20
+  }
 })

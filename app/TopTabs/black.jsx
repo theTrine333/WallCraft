@@ -1,8 +1,8 @@
-import { StyleSheet, TouchableOpacity, Image ,FlatList,ActivityIndicator,Text, View } from 'react-native'
+import { StyleSheet, TouchableOpacity,FlatList,ActivityIndicator,Text, Dimensions,View } from 'react-native'
 import {React, useState,useEffect } from 'react'
 import * as Fetcher from '../../api/fetcher'
 import { useNavigation } from '@react-navigation/native';
-
+import FastImage from '@changwoolab/react-native-fast-image';
 let page = 2;
 
 const Black = () => {
@@ -20,10 +20,16 @@ const Black = () => {
             })
             
         }} style={styles.Card}>
-            <Image
-                source={{uri: `${Poster}`}}
-                style={{width:105,height:150,borderRadius:10}}
-                resizeMode='cover'
+            <FastImage
+                source={{
+                  uri: Poster,
+                  priority: FastImage.priority.high,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+                loadingIndicatorSource={(
+                  <ActivityIndicator/>
+                )}
+                style={{flex:1,borderRadius:10}}
             />
         </TouchableOpacity>
     )
@@ -72,7 +78,7 @@ const Black = () => {
 }
 
 export default Black
-
+const {height,width} = Dimensions.get("window");
 const styles = StyleSheet.create({
   container:{
     flex:1,
@@ -85,6 +91,8 @@ const styles = StyleSheet.create({
     flex:1
   },Card:{
     marginLeft:10,
-    marginBottom:10
+    marginBottom:10,
+    height:height*0.18,
+    width:width*0.29
   }
 })

@@ -10,6 +10,7 @@ import Tabs from './TopTabs/_layout';
 import { StatusBar } from 'expo-status-bar';
 
 export default function MainScreen() {
+
   const navigation = useNavigation();
 
   function HeaderImage({Title,Poster}){
@@ -29,6 +30,7 @@ export default function MainScreen() {
       </TouchableOpacity>
     )
   }
+  
   function ImageCerds({Poster,ImageUrl}){
     
     return(

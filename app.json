@@ -2,7 +2,7 @@
   "expo": {
     "name": "WallCraft",
     "slug": "wcraft",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/2.png",
     "scheme": "wallcraft",
@@ -20,7 +20,7 @@
         "android.permission.SET_WALLPAPER",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE"
-    ],
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/2.png",
         "backgroundColor": "#000000"
@@ -37,8 +37,7 @@
       [
         "react-native-admob-native-ads",
         {
-          "androidAppId": "ca-app-pub-5482160285556109~4677496359",
-          "iosAppId": "ca-app-pub-5482160285556109~4677496359"
+          "androidAppId": "ca-app-pub-5482160285556109~4677496359"
         }
       ]
     ],

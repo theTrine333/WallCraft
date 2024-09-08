@@ -1,7 +1,7 @@
 import { Text, View } from '@/components/Themed';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react'
-import { Share,ScrollView,Platform,Dimensions,StyleSheet, FlatList,Pressable,Alert, TouchableOpacity, ActivityIndicator,Modal } from 'react-native';
+import { Share,ScrollView,Platform,Dimensions,StyleSheet, FlatList,TouchableOpacity, ActivityIndicator,Modal } from 'react-native';
 import * as Icon from 'react-native-heroicons/outline'
 import { getSimilarTags } from '@/api/fetcher';
 import { setWallpaper, TYPE_SCREEN } from 'rn-wallpapers';
@@ -101,7 +101,7 @@ const Viewer = ({navigation, route}) => {
           Tag:title
         })
       }} style={style.Card}>
-          <Image
+          <FastImage
               source={{uri: Poster+"?h=450&r=0.5"}}
               style={{width:220,height:150,borderRadius:10}}
               resizeMode='cover'

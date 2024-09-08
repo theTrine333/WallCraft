@@ -1,39 +1,14 @@
-import { StyleSheet, TouchableOpacity, FlatList,ActivityIndicator,Text, Dimensions,View } from 'react-native'
+import { StyleSheet, TouchableOpacity,FlatList,ActivityIndicator,Text, View, Dimensions } from 'react-native'
 import {React, useState,useEffect } from 'react'
 import * as Fetcher from '../../api/fetcher'
-import { useNavigation } from '@react-navigation/native';
-import FastImage from '@changwoolab/react-native-fast-image';
+import { ImageCards } from '../../components/Images';
 let page = 2;
 
 const Cars = () => {
   const [isLoading,setLoading] = useState(true)
   const [Tags,setTags] = useState([])
   const [hasFetched, setHasFetched] = useState(false);
-  const navigation = useNavigation();
-
-  function ImageCards({Poster,ImageUrl}){
-    return(
-        <TouchableOpacity onPress={() => {
-            navigation.push('Viewer',{
-                Poster:Poster,
-                ImageUrl:ImageUrl
-            })
-            
-        }} style={styles.Card}>
-            <FastImage
-                source={{
-                  uri: Poster,
-                  priority: FastImage.priority.high,
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-                loadingIndicatorSource={(
-                  <ActivityIndicator/>
-                )}
-                style={{flex:1,borderRadius:10}}
-            />
-        </TouchableOpacity>
-    )
-  }
+ 
 
   
   useEffect(() =>{

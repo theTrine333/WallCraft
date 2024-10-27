@@ -17,7 +17,7 @@ import { getSimilarTags } from "@/api/fetcher";
 import { setWallpaper, TYPE_SCREEN } from "rn-wallpapers";
 import * as FileSystem from "expo-file-system";
 import ProgressCircle from "rn-circle-progress";
-import FastImage from "@changwoolab/react-native-fast-image";
+import FastImage from "react-native-fast-image";
 
 const WallCraftFolder = "WallCraft";
 

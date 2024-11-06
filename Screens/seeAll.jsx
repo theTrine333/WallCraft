@@ -5,6 +5,7 @@ import {
   Share,
   ScrollView,
   Dimensions,
+  Image,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -12,13 +13,14 @@ import {
 } from "react-native";
 import * as Icon from "react-native-heroicons/outline";
 import * as Fetcher from "../api/fetcher";
-import FastImage from "@phantom/react-native-fast-image";
 let page = 2;
 
 const SeeAll = ({ navigation, route }) => {
   const tag = route.params.Tag;
+  const image_count = route.params.Count.match(/\d+/)[0];
   const [Tags, setTags] = useState([]);
   const [loading, isLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(true);
   const [error, setError] = useState(false);
   React.useEffect(() => {
     Fetcher.see_all(tag, 0)
@@ -44,10 +46,10 @@ const SeeAll = ({ navigation, route }) => {
         }}
         style={styles.Card}
       >
-        <FastImage
-          source={{ uri: Poster }}
+        <Image
+          src={Poster}
           style={{ flex: 1, borderRadius: 10 }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode="cover"
         />
       </TouchableOpacity>
     );
@@ -73,21 +75,28 @@ const SeeAll = ({ navigation, route }) => {
           <FlatList
             data={Tags}
             renderItem={({ item }) => <ImageCerds Poster={item} />}
-            keyExtractor={(item, index) => index.toString()}
             numColumns={3}
             showsVerticalScrollIndicator={false}
             vertical
             onEndReached={async () => {
-              Fetcher.see_all(tag, page).then((tags) => {
-                setTags((oldTags) => {
-                  return [...oldTags, ...tags];
+              if (Tags.length < image_count) {
+                Fetcher.see_all(tag, page).then((tags) => {
+                  setTags((oldTags) => {
+                    return [...oldTags, ...tags];
+                  });
+                  page = page + 1;
                 });
-                page = page + 1;
-              });
+              } else {
+                setLoadingMore(false);
+              }
             }}
-            ListFooterComponent={() => (
-              <ActivityIndicator size={"small"} color={"green"} />
-            )}
+            ListFooterComponent={() => {
+              loadingMore ? (
+                <ActivityIndicator size={"small"} color={"green"} />
+              ) : (
+                <></>
+              );
+            }}
           />
         </View>
       )}

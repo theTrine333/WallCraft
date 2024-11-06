@@ -17,13 +17,12 @@ import * as Icon from "react-native-heroicons/outline";
 import { getSimilarTags } from "../api/fetcher";
 import { setWallpaper, TYPE_SCREEN } from "rn-wallpapers";
 import * as FileSystem from "expo-file-system";
+import { BlurView } from "expo-blur";
 import ProgressCircle from "rn-circle-progress";
 const WallCraftFolder = "WallCraft";
 
 const Viewer = ({ navigation, route }) => {
   const poster = route.params.Poster;
-  console.log(poster);
-
   const similars_url = route.params.ImageUrl;
   const { width, height } = Dimensions.get("window");
   const Poster = poster.replace(/\?.*/, "");
@@ -295,10 +294,10 @@ const Viewer = ({ navigation, route }) => {
 
       <View
         style={{
-          width: "100%",
-          flexDirection: "row",
-          justifyContent: "center",
-          backgroundColor: "transparent",
+          position: "absolute",
+          bottom: 20,
+          left: 20,
+          borderRadius: 26,
         }}
       >
         <TouchableOpacity
@@ -309,7 +308,15 @@ const Viewer = ({ navigation, route }) => {
         >
           <Icon.Cog8ToothIcon color="green" size={38} />
         </TouchableOpacity>
-
+      </View>
+      <View
+        style={{
+          position: "absolute",
+          bottom: 20,
+          right: 20,
+          borderRadius: 26,
+        }}
+      >
         <TouchableOpacity
           style={style.buttons}
           onPress={() => {
@@ -318,19 +325,8 @@ const Viewer = ({ navigation, route }) => {
         >
           <Icon.ArrowDownCircleIcon color="green" size={38} />
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={style.buttons}
-          onPress={async () => {
-            const shareResults = await Share.share({
-              message: `Checkout this awesome wallpaper ${Poster}`,
-              title: "WallCraft",
-            });
-          }}
-        >
-          <Icon.ShareIcon color="green" size={38} />
-        </TouchableOpacity>
       </View>
+
       {loading ? (
         <ActivityIndicator color={"green"} size={"large"} />
       ) : error ? (
@@ -359,22 +355,36 @@ const Viewer = ({ navigation, route }) => {
           </View>
         </View>
       )}
+      {mainLoaded ? (
+        <View style={style.Loader}>
+          <ActivityIndicator size={30} />
+        </View>
+      ) : (
+        <></>
+      )}
     </ScrollView>
   );
 };
 
 export default Viewer;
-
+const { width, height } = Dimensions.get("screen");
 const style = StyleSheet.create({
   centeredView: {
     marginTop: "60%",
     backgroundColor: "transparent",
   },
+  Loader: {
+    position: "absolute",
+    bottom: height / 2,
+    right: width / 2,
+    left: width / 2,
+    top: height / 2,
+    borderRadius: 20,
+  },
   buttons: {
     padding: 10,
     backgroundColor: "transparent",
-    borderRadius: 10,
-    margin: 10,
+    borderRadius: 20,
     width: 50,
     height: 50,
     justifyContent: "center",

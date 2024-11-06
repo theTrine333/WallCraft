@@ -26,9 +26,10 @@ const Search = () => {
     return (
       <TouchableOpacity
         onPress={() => {
-          var tag = Fetcher.extractTags(`${data.url}`);
+          let tag = Fetcher.extractTags(`${data.url}`);
           navigation.push("seeAll", {
             Tag: tag,
+            Count: data.img_count,
           });
         }}
         style={styles.Card}
@@ -43,10 +44,10 @@ const Search = () => {
               width: width * 0.2,
             }}
           >
-            <FastImage
-              source={{ uri: `${data.img}` }}
+            <Image
+              src={data.img}
               style={{ flex: 1, borderRadius: 8 }}
-              resizeMode={FastImage.resizeMode.cover}
+              resizeMode="cover"
             />
           </View>
           <View>
@@ -66,7 +67,7 @@ const Search = () => {
   function handleTextChange(inputText) {
     setText(inputText);
     setLoading(true);
-    clearTimeout(timeoutId); // Clear previous timeout
+    clearTimeout(timeoutId);
     timeoutId = setTimeout(() => {
       Fetcher.getSearch(text, setTags).then((data) => {
         setLoading(false);
@@ -83,6 +84,7 @@ const Search = () => {
           setText(text);
           handleTextChange(text);
         }}
+        onSubmitEditing={handleTextChange}
       />
       {loading ? (
         <ActivityIndicator

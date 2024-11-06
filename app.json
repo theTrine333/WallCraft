@@ -32,6 +32,15 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
+    "plugins": [
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-5482160285556109~4677496359",
+          "iosAppId": "ca-app-pub-5482160285556109~4677496359"
+        }
+      ]
+    ],
     "extra": {
       "router": {
         "origin": false

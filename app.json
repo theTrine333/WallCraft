@@ -32,16 +32,12 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": ["expo-router"],
-    "experiments": {
-      "typedRoutes": true
-    },
     "extra": {
       "router": {
         "origin": false
       },
       "eas": {
-        "projectId": "38f26332-e83c-4489-b6f2-e24b906ec9fc"
+        "projectId": "04aecd2c-c7b4-4555-ba32-e04d6ea63c50"
       }
     }
   }

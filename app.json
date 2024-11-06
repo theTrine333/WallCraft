@@ -2,7 +2,7 @@
   "expo": {
     "name": "WallCraft",
     "slug": "wcraft",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "orientation": "portrait",
     "icon": "./assets/2.png",
     "scheme": "wallcraft",

@@ -1,6 +1,6 @@
 {
   "name": "wallcraft",
-  "version": "1.0.0",
+  "version": "1.0.9",
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -9,7 +9,6 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@phantom/react-native-fast-image": "^8.6.5",
     "@react-navigation/material-top-tabs": "^6.6.14",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
@@ -21,7 +20,6 @@
     "expo-status-bar": "^1.12.1",
     "react": "18.2.0",
     "react-native": "0.74.5",
-    "react-native-admob-native-ads": "^0.7.6",
     "react-native-cheerio": "^1.0.0-rc.4",
     "react-native-heroicons": "^4.0.0",
     "react-navigation": "^5.0.0",

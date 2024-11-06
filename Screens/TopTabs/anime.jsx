@@ -1,9 +1,7 @@
 import {
   StyleSheet,
-  TouchableOpacity,
   FlatList,
   ActivityIndicator,
-  Text,
   View,
   Dimensions,
 } from "react-native";
@@ -12,13 +10,13 @@ import * as Fetcher from "../../api/fetcher";
 import { ImageCerds } from "../../components/HeaderImage";
 let page = 2;
 
-const Dark = () => {
+const Anime = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [Tags, setTags] = useState([]);
   const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    Fetcher.get_images("dc comics", 0)
+    Fetcher.get_images("anime", 0)
       .then((tags) => {
         setTags(tags);
         setLoading(false);
@@ -37,14 +35,16 @@ const Dark = () => {
         <View style={{ flex: 1, flexDirection: "column", margin: 10 }}>
           <FlatList
             data={Tags}
-            renderItem={({ item }) => <ImageCerds Poster={item.Image} />}
+            renderItem={({ item }) => (
+              <ImageCerds Poster={item.Image} navigation={navigation} />
+            )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
             showsVerticalScrollIndicator={false}
             vertical
             onEndReachedThreshold={0.4}
             onEndReached={async () => {
-              Fetcher.get_images("dc comics", page).then((tags) => {
+              Fetcher.get_images("anime", page).then((tags) => {
                 setTags((oldTags) => {
                   return [...oldTags, ...tags];
                 });
@@ -61,8 +61,9 @@ const Dark = () => {
   );
 };
 
-export default Dark;
+export default Anime;
 const { height, width } = Dimensions.get("window");
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

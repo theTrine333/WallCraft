@@ -12,7 +12,7 @@ import * as Fetcher from "../../api/fetcher";
 import { ImageCerds } from "../../components/HeaderImage";
 let page = 2;
 
-const Black = () => {
+const Black = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [Tags, setTags] = useState([]);
   const [hasFetched, setHasFetched] = useState(false);
@@ -37,7 +37,9 @@ const Black = () => {
         <View style={{ flex: 1, flexDirection: "column", margin: 10 }}>
           <FlatList
             data={Tags}
-            renderItem={({ item }) => <ImageCerds Poster={item.Image} />}
+            renderItem={({ item }) => (
+              <ImageCerds Poster={item.Image} navigation={navigation} />
+            )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
             showsVerticalScrollIndicator={false}

@@ -1,14 +1,12 @@
 import { TouchableOpacity, Image, StyleSheet } from "react-native";
 import React from "react";
-import { Text, View } from "@/components/Themed";
-import { useNavigation } from "@react-navigation/native";
+import { Text, View } from "../components/Themed";
 
-export const ImageCerds = ({ Poster }) => {
+export const ImageCerds = ({ Poster, navigation }) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        const navigation = useNavigation();
-        navigation.push("Viewer", {
+        navigation.navigate("Viewer", {
           Poster: Poster,
         });
       }}

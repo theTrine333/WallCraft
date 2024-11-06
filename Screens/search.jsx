@@ -10,9 +10,9 @@ import {
   View,
 } from "react-native";
 import { React, useState } from "react";
-import * as Fetcher from "@/api/fetcher";
+import * as Fetcher from "../api/fetcher";
 import { useNavigation } from "@react-navigation/native";
-import FastImage from "react-native-fast-image";
+import FastImage from "@phantom/react-native-fast-image";
 
 const Search = () => {
   const [text, setText] = useState("");

@@ -12,13 +12,13 @@ import * as Fetcher from "../../api/fetcher";
 import { ImageCerds } from "../../components/HeaderImage";
 let page = 2;
 
-const Anime = ({ navigation }) => {
+const Dark = ({ navigation }) => {
   const [isLoading, setLoading] = useState(true);
   const [Tags, setTags] = useState([]);
   const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
-    Fetcher.get_images("anime", 0)
+    Fetcher.get_images("dc comics", 0)
       .then((tags) => {
         setTags(tags);
         setLoading(false);
@@ -38,7 +38,7 @@ const Anime = ({ navigation }) => {
           <FlatList
             data={Tags}
             renderItem={({ item }) => (
-              <ImageCerds Poster={item.Image} Nav={navigator} />
+              <ImageCerds Poster={item.Image} navigation={navigation} />
             )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={3}
@@ -46,7 +46,7 @@ const Anime = ({ navigation }) => {
             vertical
             onEndReachedThreshold={0.4}
             onEndReached={async () => {
-              Fetcher.get_images("anime", page).then((tags) => {
+              Fetcher.get_images("dc comics", page).then((tags) => {
                 setTags((oldTags) => {
                   return [...oldTags, ...tags];
                 });
@@ -63,9 +63,8 @@ const Anime = ({ navigation }) => {
   );
 };
 
-export default Anime;
+export default Dark;
 const { height, width } = Dimensions.get("window");
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

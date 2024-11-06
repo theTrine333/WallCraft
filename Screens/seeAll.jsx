@@ -1,4 +1,4 @@
-import { Text, View } from "@/components/Themed";
+import { Text, View } from "../components/Themed";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import * as Icon from "react-native-heroicons/outline";
 import * as Fetcher from "../api/fetcher";
-import FastImage from "react-native-fast-image";
+import FastImage from "@phantom/react-native-fast-image";
 let page = 2;
 
 const SeeAll = ({ navigation, route }) => {

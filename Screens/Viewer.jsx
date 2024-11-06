@@ -1,4 +1,4 @@
-import { Text, View } from "@/components/Themed";
+import { Text, View } from "../components/Themed";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
@@ -6,6 +6,7 @@ import {
   ScrollView,
   Platform,
   Dimensions,
+  Image,
   StyleSheet,
   FlatList,
   TouchableOpacity,
@@ -13,19 +14,20 @@ import {
   Modal,
 } from "react-native";
 import * as Icon from "react-native-heroicons/outline";
-import { getSimilarTags } from "@/api/fetcher";
+import { getSimilarTags } from "../api/fetcher";
 import { setWallpaper, TYPE_SCREEN } from "rn-wallpapers";
 import * as FileSystem from "expo-file-system";
 import ProgressCircle from "rn-circle-progress";
-import FastImage from "react-native-fast-image";
-
 const WallCraftFolder = "WallCraft";
 
 const Viewer = ({ navigation, route }) => {
   const poster = route.params.Poster;
+  console.log(poster);
+
   const similars_url = route.params.ImageUrl;
   const { width, height } = Dimensions.get("window");
-  const Poster = poster.slice(0, -12);
+  const Poster = poster.replace(/\?.*/, "");
+  const [mainLoaded, setMainLoaded] = React.useState(true);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(false);
   const [downloadProgress, setDownloadProgress] = React.useState(0);
@@ -129,7 +131,7 @@ const Viewer = ({ navigation, route }) => {
         }}
         style={style.Card}
       >
-        <FastImage
+        <Image
           source={{ uri: Poster + "?h=450&r=0.5" }}
           style={{ width: 220, height: 150, borderRadius: 10 }}
           resizeMode="cover"
@@ -277,18 +279,18 @@ const Viewer = ({ navigation, route }) => {
         </View>
       </Modal>
 
-      <FastImage
+      <Image
         style={{
           width: width,
           height: height + 40,
           borderRadius: 5,
           alignSelf: "center",
         }}
-        source={{
-          uri: Poster,
-          priority: FastImage.priority.high,
+        onLoadEnd={() => {
+          setMainLoaded(false);
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        src={Poster}
+        resizeMode="cover"
       />
 
       <View

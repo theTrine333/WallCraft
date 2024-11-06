@@ -1,5 +1,5 @@
 import axios from "axios";
-import cheerio from "cheerio";
+import cheerio from "react-native-cheerio";
 
 const mainUrl = "https://wallpaper.mob.org/";
 var fetchUrl = "";

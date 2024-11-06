@@ -24,6 +24,7 @@
     "react": "18.2.0",
     "react-native": "0.74.5",
     "react-native-cheerio": "^1.0.0-rc.4",
+    "react-native-google-mobile-ads": "^14.2.5",
     "react-native-heroicons": "^4.0.0",
     "react-navigation": "^5.0.0",
     "rn-circle-progress": "^1.0.4",

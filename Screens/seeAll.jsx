@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import * as Icon from "react-native-heroicons/outline";
 import * as Fetcher from "../api/fetcher";
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
 let page = 2;
 
 const SeeAll = ({ navigation, route }) => {
@@ -22,6 +23,7 @@ const SeeAll = ({ navigation, route }) => {
   const [loading, isLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
   const [error, setError] = useState(false);
+  const adUnitId = "ca-app-pub-5482160285556109/6632741707";
   React.useEffect(() => {
     Fetcher.see_all(tag, 0)
       .then((tags) => {
@@ -100,6 +102,12 @@ const SeeAll = ({ navigation, route }) => {
           />
         </View>
       )}
+      <View style={{ position: "absolute", bottom: 0 }}>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      </View>
     </View>
   );
 };

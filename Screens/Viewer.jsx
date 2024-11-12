@@ -19,6 +19,12 @@ import { setWallpaper, TYPE_SCREEN } from "rn-wallpapers";
 import * as FileSystem from "expo-file-system";
 import { BlurView } from "expo-blur";
 import ProgressCircle from "rn-circle-progress";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 const WallCraftFolder = "WallCraft";
 
 const Viewer = ({ navigation, route }) => {
@@ -34,6 +40,7 @@ const Viewer = ({ navigation, route }) => {
   const [Tags, setTags] = React.useState([]);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [isSet, setIsSet] = React.useState(false);
+  const adUnitId = "ca-app-pub-5482160285556109/6632741707";
 
   const downloadFile = async () => {
     const uri = Poster;
@@ -295,7 +302,7 @@ const Viewer = ({ navigation, route }) => {
       <View
         style={{
           position: "absolute",
-          bottom: 20,
+          bottom: 60,
           left: 20,
           borderRadius: 26,
         }}
@@ -312,7 +319,7 @@ const Viewer = ({ navigation, route }) => {
       <View
         style={{
           position: "absolute",
-          bottom: 20,
+          bottom: 60,
           right: 20,
           borderRadius: 26,
         }}
@@ -362,6 +369,12 @@ const Viewer = ({ navigation, route }) => {
       ) : (
         <></>
       )}
+      <View style={{ position: "absolute", bottom: 0 }}>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      </View>
     </ScrollView>
   );
 };

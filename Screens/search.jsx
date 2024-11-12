@@ -13,6 +13,7 @@ import { React, useState } from "react";
 import * as Fetcher from "../api/fetcher";
 import { useNavigation } from "@react-navigation/native";
 import FastImage from "@phantom/react-native-fast-image";
+import { BannerAd, BannerAdSize } from "react-native-google-mobile-ads";
 
 const Search = () => {
   const [text, setText] = useState("");
@@ -21,6 +22,7 @@ const Search = () => {
   const [isFetched, setFetched] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+  const adUnitId = "ca-app-pub-5482160285556109/6632741707";
   let timeoutId = null;
   function ResultCard({ data }) {
     return (
@@ -110,6 +112,12 @@ const Search = () => {
           />
         </View>
       )}
+      <View style={{ position: "absolute", bottom: 0 }}>
+        <BannerAd
+          unitId={adUnitId}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+        />
+      </View>
     </View>
   );
 };

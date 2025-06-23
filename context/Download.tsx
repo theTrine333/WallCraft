@@ -71,7 +71,6 @@ export const DownloadProvider = ({ children }: DownloadProviderProps) => {
       if (!result) {
         throw new Error("Download failed: no result returned.");
       }
-
       insertImageRecord({ db, uri: nextUrl, localUri: result.uri });
       syncDownloadsToCache(db);
     } catch (error) {

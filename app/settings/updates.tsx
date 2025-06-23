@@ -1,12 +1,13 @@
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import ThemedStyles, { height, width } from "@/constants/Styles";
+import ThemedStyles, { width } from "@/constants/Styles";
 import * as Updates from "expo-updates";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
+  Image,
   Pressable,
   useColorScheme,
 } from "react-native";
@@ -54,33 +55,14 @@ const Updater = () => {
   };
 
   return (
-    <ThemedView style={{ flex: 1 }}>
-      {/* Header */}
-      <ThemedView
-        style={{
-          width,
-          height: height * 0.18,
-          backgroundColor: Colors[theme].blur,
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-        }}
-      >
-        <ThemedText style={{ fontWeight: "bold", fontSize: 30 }}>
-          Wall
-          <ThemedText
-            style={{
-              fontWeight: "bold",
-              fontSize: 30,
-              color: Colors.constants.pink,
-            }}
-          >
-            Craft
-          </ThemedText>
-        </ThemedText>
-        <ThemedText style={{ fontFamily: "SpaceMono" }}>Updates</ThemedText>
-      </ThemedView>
-
+    <ThemedView
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+      }}
+    >
       {/* Body */}
       <ThemedView
         style={{
@@ -90,6 +72,16 @@ const Updater = () => {
           gap: 20,
         }}
       >
+        <Image
+          source={require("../../assets/images/logo1.png")}
+          style={{
+            height: 150,
+            width: 150,
+            borderRadius: 300,
+            borderColor: "white",
+          }}
+        />
+        <ThemedText style={{ fontFamily: "SpaceMono" }}>Updates</ThemedText>
         {isChecking && (
           <>
             <ActivityIndicator size="large" color={Colors.constants.pink} />
@@ -116,9 +108,10 @@ const Updater = () => {
               onPress={checkForUpdates}
               style={{
                 backgroundColor: Colors.constants.pink,
-                paddingVertical: 10,
-                paddingHorizontal: 20,
-                borderRadius: 8,
+                padding: 10,
+                borderRadius: 12,
+                width: width * 0.8,
+                alignItems: "center",
               }}
             >
               <ThemedText style={{ color: "#fff" }}>Check Again</ThemedText>

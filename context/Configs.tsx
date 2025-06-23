@@ -68,6 +68,7 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     Appearance.setColorScheme(config.theme);
   }, [config]);
+
   const updateConfig = async (updates: Partial<AppConfig>) => {
     const newConfig = { ...config, ...updates };
     setConfig(newConfig);

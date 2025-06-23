@@ -1,22 +1,24 @@
 {
   "expo": {
     "name": "Wallcraft",
-    "slug": "Wallcraft",
-    "version": "1.0.0",
+    "slug": "wcraft",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "wallcraft",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "community.tesla.wcraft"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "community.tesla.wcraft"
     },
     "web": {
       "bundler": "metro",
@@ -35,6 +37,11 @@
         }
       ]
     ],
+    "extra": {
+      "eas": {
+        "projectId": "04aecd2c-c7b4-4555-ba32-e04d6ea63c50"
+      }
+    },
     "experiments": {
       "typedRoutes": true
     }

@@ -1,4 +1,5 @@
 import { insertImageRecord } from "@/api/db"; // Adjust import path as needed
+import { syncDownloadsToCache } from "@/Cache";
 import * as FileSystem from "expo-file-system";
 import { SQLiteDatabase, useSQLiteContext } from "expo-sqlite";
 import React, {
@@ -72,6 +73,7 @@ export const DownloadProvider = ({ children }: DownloadProviderProps) => {
       }
 
       insertImageRecord({ db, uri: nextUrl, localUri: result.uri });
+      syncDownloadsToCache(db);
     } catch (error) {
       console.error("Download failed:", error);
     }

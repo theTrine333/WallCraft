@@ -1,4 +1,4 @@
-import ThemedStyles from "@/constants/Styles";
+import ThemedStyles, { width } from "@/constants/Styles";
 import { dropDownItem, dropdownProps } from "@/constants/types";
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
@@ -10,7 +10,7 @@ const DropdownComponent = ({
   LeftIcon,
   labelFieldText = "label",
   placeHolderText = "Select an option",
-  maxHeight = 300,
+  maxHeight = 180,
   valueFieldText = "value",
 }: dropdownProps) => {
   const styles = ThemedStyles();
@@ -33,16 +33,17 @@ const DropdownComponent = ({
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
       data={values}
-      search
       maxHeight={maxHeight}
       labelField={labelFieldText}
       valueField={valueFieldText}
       placeholder={placeHolderText}
       value={selectedItem}
+      closeModalWhenSelectedItem
       onChange={(item: dropDownItem) => {
         setSelectedItem(item);
         setValue(item.value);
       }}
+      containerStyle={{ flex: 1, width: width * 0.3 }}
       renderLeftIcon={() => <>{LeftIcon}</>}
     />
   );

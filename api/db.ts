@@ -1,5 +1,7 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as FileSystem from "expo-file-system";
 import { SQLiteDatabase } from "expo-sqlite";
-
+import { Alert } from "react-native";
 type DownloadRecord = {
   db: SQLiteDatabase;
   uri: string;
@@ -23,6 +25,93 @@ export const insertImageRecord = async ({
     console.error("Failed to insert image record:", error);
   }
 };
+
+export const clearAllImages = async (db: SQLiteDatabase) => {
+  try {
+    await db.runAsync("DELETE FROM Downloads");
+    return true;
+  } catch (error) {
+    console.log("Error deleting downloads : ", error);
+  }
+};
+
+export const checkDownload = async ({
+  db,
+  uri,
+  localUri,
+}: {
+  db: SQLiteDatabase;
+  uri: string;
+  localUri: string;
+}) => {
+  try {
+    const res = await db.getFirstAsync(
+      "SELECT * FROM Downloads where uri=? OR localUri=?",
+      [uri, localUri]
+    );
+    if (res != null) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    console.log("Error occured - ", error);
+  }
+};
+
+const KEYS_TO_CLEAR = [
+  "APP_CONFIG",
+  "WALLPAPER_DOWNLOADS",
+  "WALLPAPER_CURRENT_INDEX",
+];
+
+export function confirmAndClearAppCache(): Promise<boolean> {
+  return new Promise((resolve) => {
+    Alert.alert(
+      "Clear Cache",
+      "Are you sure you want to delete all cached data and downloaded wallpapers?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+          onPress: () => resolve(false),
+        },
+        {
+          text: "Yes, Clear All",
+          style: "destructive",
+          onPress: async () => {
+            try {
+              const cached = await AsyncStorage.getItem("WALLPAPER_DOWNLOADS");
+              const downloads: { localUri: string }[] = cached
+                ? JSON.parse(cached)
+                : [];
+
+              for (const { localUri } of downloads) {
+                if (localUri?.startsWith("file://")) {
+                  try {
+                    await FileSystem.deleteAsync(localUri, {
+                      idempotent: true,
+                    });
+                    console.log(`🗑️ Deleted file: ${localUri}`);
+                  } catch (err) {
+                    console.warn(`⚠️ Failed to delete: ${localUri}`, err);
+                  }
+                }
+              }
+
+              await AsyncStorage.multiRemove(KEYS_TO_CLEAR);
+              console.log("🧹 Cache and downloads cleared");
+              resolve(true);
+            } catch (err) {
+              console.error("❌ Failed to clear app cache and downloads:", err);
+              resolve(false);
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
+  });
+}
 
 export const getAllDownloads = async (
   db: SQLiteDatabase

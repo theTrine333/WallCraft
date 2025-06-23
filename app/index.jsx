@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import ThemedStyles, { height } from "@/constants/Styles";
-import { startWallpaperService } from "@/Service";
+import { registerWallpaperTask } from "@/Service";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRouter } from "expo-router";
@@ -42,7 +42,7 @@ export default function HomeScreen() {
   const pageRef = useRef(1);
   const db = useSQLiteContext();
   useEffect(() => {
-    startWallpaperService(db);
+    registerWallpaperTask(db);
   }, []);
   async function getImages() {
     try {
@@ -119,6 +119,7 @@ export default function HomeScreen() {
             style={styles.roundIconBtn}
             onPress={() => {
               router.push("/settings");
+              // router.push("/home/downloads");
             }}
           >
             <Ionicons name="menu" size={25} color={Colors[theme].text} />

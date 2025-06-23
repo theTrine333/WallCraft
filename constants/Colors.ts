@@ -9,7 +9,7 @@ export const Colors = {
     icon: "#687076",
     tabIconDefault: "#687076",
     tabIconSelected: tintColorLight,
-    blur: "rgba(255,255,255,.1)",
+    blur: "rgba(0,0,0,.1)",
   },
   dark: {
     text: "#ECEDEE",
@@ -18,8 +18,7 @@ export const Colors = {
     icon: "#9BA1A6",
     tabIconDefault: "#9BA1A6",
     tabIconSelected: tintColorDark,
-
-    blur: "rgba(0,0,0,.1)",
+    blur: "rgba(255,255,255,.1)",
   },
   constants: {
     pink: "#F02A4B",

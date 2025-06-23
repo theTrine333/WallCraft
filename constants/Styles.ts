@@ -51,7 +51,7 @@ const ThemedStyles = (theme: "light" | "dark" = "light") =>
       padding: 5,
     },
     genreCard: {
-      backgroundColor: theme === "light" ? Colors.light.blur : "white",
+      backgroundColor: theme === "light" ? "lightgrey" : "white",
       padding: 10,
       flexDirection: "row",
       gap: 10,
@@ -78,7 +78,7 @@ const ThemedStyles = (theme: "light" | "dark" = "light") =>
     },
     viewerPage: { flex: 1 },
     searchBox: {
-      backgroundColor: Colors.light.blur,
+      backgroundColor: Colors[theme].blur,
       width: "100%",
       // marginLeft: 5,
       height: 38,

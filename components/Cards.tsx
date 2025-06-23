@@ -31,14 +31,21 @@ const Genre = ({
       <Text
         style={[
           {
-            backgroundColor: Colors[theme].blur,
+            backgroundColor: theme === "light" ? "white" : Colors.light.blur,
             paddingHorizontal: 5,
             fontSize: 10,
             textAlign: "center",
             verticalAlign: "middle",
+            color:
+              selected === name
+                ? theme === "light"
+                  ? "black"
+                  : "white"
+                : theme === "light"
+                ? Colors[theme].text
+                : "black",
             borderRadius: 10,
           },
-          selected === name && { color: "white" },
         ]}
       >
         {counter}

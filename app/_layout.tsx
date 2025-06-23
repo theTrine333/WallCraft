@@ -1,3 +1,4 @@
+import { ConfigProvider } from "@/context/Configs";
 import { DownloadProvider } from "@/context/Download";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
@@ -16,6 +17,12 @@ import { useEffect, useState } from "react";
 import "react-native-reanimated";
 
 SplashScreen.preventAutoHideAsync();
+
+if (!__DEV__) {
+  console.log = () => {};
+  console.warn = () => {};
+  console.error = () => {};
+}
 
 const loadDatabase = async () => {
   const dbName = "base.db";
@@ -74,12 +81,14 @@ export default function RootLayout() {
         assetSource={{ assetId: require("../assets/db/base.db") }}
         useSuspense
       >
-        <DownloadProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </DownloadProvider>
+        <ConfigProvider>
+          <DownloadProvider>
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </DownloadProvider>
+        </ConfigProvider>
       </SQLiteProvider>
       <StatusBar style="auto" />
     </ThemeProvider>

@@ -39,10 +39,11 @@ const Search = () => {
     <ThemedView style={styles.container}>
       <TextInput
         style={styles.searchBox}
-        placeholder="Search for a tag"
+        placeholder="Search for wallpapers"
+        autoFocus
+        autoCapitalize={"none"}
         onChangeText={(text) => {
           setText(text);
-          // console.log(text);
           handleTextChange(text);
         }}
         onSubmitEditing={() => {

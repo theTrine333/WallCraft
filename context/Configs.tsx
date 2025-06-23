@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
-
+import { Appearance } from "react-native";
 // Types
 export type ThemePreference = "light" | "dark" | null;
 
@@ -9,6 +9,17 @@ export type AppConfig = {
   wallpaperInterval: number; // in minutes
   autoStart: boolean;
 };
+
+export type dropDownItem = {
+  label: string;
+  value: ThemePreference;
+};
+
+const themes: dropDownItem[] = [
+  { label: "System", value: null },
+  { label: "Dark", value: "dark" },
+  { label: "Light", value: "light" },
+];
 
 const DEFAULT_CONFIG: AppConfig = {
   theme: null,
@@ -23,6 +34,7 @@ const STORAGE_KEY = "APP_CONFIG";
 type ConfigContextType = {
   config: AppConfig;
   updateConfig: (updates: Partial<AppConfig>) => Promise<void>;
+  themes: dropDownItem[];
 };
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -30,8 +42,7 @@ const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 // Hook
 export const useAppConfig = (): ConfigContextType => {
   const ctx = useContext(ConfigContext);
-  if (!ctx)
-    throw new Error("useAppConfig must be used within AppConfigProvider");
+  if (!ctx) throw new Error("useAppConfig must be used within ConfigProvider");
   return ctx;
 };
 
@@ -54,6 +65,9 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
     })();
   }, []);
 
+  useEffect(() => {
+    Appearance.setColorScheme(config.theme);
+  }, [config]);
   const updateConfig = async (updates: Partial<AppConfig>) => {
     const newConfig = { ...config, ...updates };
     setConfig(newConfig);
@@ -65,7 +79,7 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   return (
-    <ConfigContext.Provider value={{ config, updateConfig }}>
+    <ConfigContext.Provider value={{ config, updateConfig, themes }}>
       {children}
     </ConfigContext.Provider>
   );

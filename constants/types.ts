@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { TextStyle } from "react-native";
 
 export interface ImageType {
   Image_url: string;
@@ -19,6 +20,8 @@ export interface settingsBtnProps {
   Heading: string;
   SubHeading?: string;
   Action?: any;
+  HeadingStyle?: TextStyle;
+  SubHeadingStyle?: TextStyle;
 }
 
 export type dropDownItem = {

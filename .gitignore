@@ -3,6 +3,7 @@
 # dependencies
 node_modules/
 ios/
+bun*
 # Expo
 .expo/
 dist/

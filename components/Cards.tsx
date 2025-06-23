@@ -31,7 +31,7 @@ const Genre = ({
       <Text
         style={[
           {
-            backgroundColor: Colors.light.blur,
+            backgroundColor: Colors[theme].blur,
             paddingHorizontal: 5,
             fontSize: 10,
             textAlign: "center",

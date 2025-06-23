@@ -15,28 +15,21 @@ const task = async () => {
 
     try {
       if (!globalDB) throw new Error("No database connection provided");
-
       const downloads = await getAllDownloads(globalDB);
-      console.log(downloads);
-
       if (downloads.length === 0) {
         console.log("No wallpapers found in DB.");
       } else {
         const wallpaper = downloads[index % downloads.length];
         const localUri = wallpaper.localUri;
-
-        console.log(`Next wallpaper to set: ${localUri}`);
-
         // Uncomment this to actually set the wallpaper:
         await setWallpaper({ uri: localUri }, TYPE_SCREEN.HOME);
-
         index++;
       }
     } catch (error) {
       console.error("Error during wallpaper update:", error);
     }
 
-    await sleep(60 * 1000); // Wait 1 minute
+    await sleep(60 * 15000); // Wait 1 minute
   }
 };
 
@@ -55,7 +48,7 @@ const options = {
 
 let index = 0;
 
-export async function startWallpaperService(db: any) {
+export async function startWallpaperService(db: SQLiteDatabase) {
   if (!BackgroundService.isRunning()) {
     globalDB = db; // assign to closure variable
     await BackgroundService.start(task, options);

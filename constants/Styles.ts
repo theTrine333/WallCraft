@@ -10,6 +10,43 @@ const ThemedStyles = (theme: "light" | "dark" = "light") =>
       backgroundColor: Colors[theme].blur,
       borderRadius: 100,
     },
+    // Drop Down styles
+    dropdown: {
+      margin: 16,
+      height: 50,
+      borderBottomColor: "gray",
+      borderBottomWidth: 0.5,
+    },
+    icon: {
+      marginRight: 5,
+    },
+    placeholderStyle: {
+      fontSize: 16,
+    },
+    selectedTextStyle: {
+      fontSize: 16,
+    },
+    iconStyle: {
+      width: 20,
+      height: 20,
+    },
+    inputSearchStyle: {
+      height: 40,
+      fontSize: 16,
+    },
+    // End of drop down styles
+    settingsBtn: {
+      padding: 10,
+      width: "95%",
+      marginHorizontal: 20,
+      alignSelf: "center",
+      borderBottomWidth: 1,
+      borderColor:
+        theme === "dark" ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+      height: height * 0.08,
+      flexDirection: "row",
+      alignItems: "center",
+    },
     textInput: {
       padding: 5,
     },
